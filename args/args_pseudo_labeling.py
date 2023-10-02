@@ -58,6 +58,7 @@ def get_args_parser():
     ###############
     # Copy source #
     ###############
+    """
     try:
         copy_source(os.getcwd(), args.log_dir)
         
@@ -68,7 +69,7 @@ def get_args_parser():
             
     except:
         pass
-            
+    """
     
     return args
 
