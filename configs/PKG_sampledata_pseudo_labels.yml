@@ -8,27 +8,31 @@ entity:
 # -- External knowledge settings:
 need_external_knowledge: True
 external_knowledge_ready: False
-segment_wikistep_sim_scores_ready: False
-# nodes_formed: False
-# edges_formed: False
-pseudo_label_VNM_ready: False
+segment_wikistep_sim_scores_ready: True
+nodes_formed: False
+edges_formed: False
+#pseudo_label_VNM_ready: False
 pseudo_label_VTM_ready: False
-pseudo_label_TCL_ready: False
-pseudo_label_NRL_ready: False
+#pseudo_label_TCL_ready: False
+#pseudo_label_NRL_ready: False
 
+# Added
+# -- Similarity settings:
+use_captions: True
+#sub_dir: pkg_data/cae/subtitles
+sub_dir: pkg_data/howto100m/subtitles
+#frame_dir: pkg_data/cae/videos
+frame_dir: pkg_data/howto100m/videos
 
 # -- wikiHow settings:
-wikihow_dir: /export/share/hongluzhou/data/wikiHow
+wikihow_dir: pkg_data/wikiHow
 wikihow_num_tasks: 1053
 
-
 # -- HowTo100M settings:
-howto100m_dir: /export/share/hongluzhou/data/sample_howto100m
-howto100m_num_tasks: 1059
-
-video_meta_csv_path: /export/einstein-vision/multimodal_video/datasets/HowTo100M/HowTo100M_v1.csv
-task_id_to_task_name_csv_path: /export/einstein-vision/multimodal_video/datasets/HowTo100M/task_ids.csv
-
+howto100m_dir: pkg_data/howto100m
+howto100m_num_tasks: 1059 # TO CHECK
+video_meta_csv_path: pkg_data/howto100m/HowTo100M_v1.csv
+task_id_to_task_name_csv_path: pkg_data/howto100m/task_ids.csv
 
 # -- Graph node settings:
 remove_step_duplicates: True
@@ -40,11 +44,11 @@ num_nodes: 10038
 
 
 # -- Graph edge settings:
-graph_find_matched_steps_criteria: threshold
+graph_find_matched_steps_criteria: topK
 # {threshold | threshold+topK | topK}
 graph_find_matched_steps_for_segments_thresh: 10
 graph_find_matched_steps_for_segments_topK: 3
-edge_min_aggconf: 10
+edge_min_aggconf: 1000
 
 
 # -- Pseudo label settings:
@@ -79,12 +83,12 @@ label_khop: 2
 seed: -1
 # seed is -1 means random, otherwise put a seed number that is greater than 0
 curr_time: -1
-num_workers: -1
+num_workers: 8
 # num_workers -1 will dynamically compute the number of available workers
 working_abspath: 
 partition_dataset: False
 
 
 # -- Output settings:
-checkpoint_dir: /export/home/outputs/Paprika/output_checkpoints/
-log_dir: /export/home/outputs/Paprika/output_logs/
+checkpoint_dir: /mount/arbeitsdaten/jp-silberer/ernie_vil/model/paprika/output_checkpoints/
+log_dir: output_logs

@@ -1,8 +1,6 @@
 import os
 
-    
 def obtain_external_knowledge(args, logger):
-    
     if hasattr(args, 'segment_wikistep_sim_scores_DS_ready') and (
         not args.segment_wikistep_sim_scores_DS_ready):
         
@@ -11,10 +9,9 @@ def obtain_external_knowledge(args, logger):
 
     if hasattr(args, 'segment_wikistep_sim_scores_ready') and (
         not args.segment_wikistep_sim_scores_ready):
-        
         from datasets.build_knowledge.get_sim_scores import get_sim_scores
         get_sim_scores(args, logger)
-        
+
     if hasattr(args, 'nodes_formed') and not args.nodes_formed:
         
         from datasets.build_knowledge.get_nodes import get_nodes
@@ -23,8 +20,10 @@ def obtain_external_knowledge(args, logger):
     if hasattr(args, 'edges_formed') and not args.edges_formed:
         
         from datasets.build_knowledge.get_edges import get_edges
-        pkg = get_edges(args, logger)
-        
+        pkg, G_wikihow, G_howto100m = get_edges(args, logger)
+
+    exit()
+
     if hasattr(args, 'pseudo_label_DS_ready') and not args.pseudo_label_DS_ready:
         
         from datasets.build_knowledge.pseudo_label_DS import get_pseudo_label_DS
