@@ -1,7 +1,12 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+.ipynb_checkpoints/
 
 # dataset
 HowTo100M
 wikiHow
-sample_howto100m
+pkg_data
+
+# output
+output_logs/
+*.out
