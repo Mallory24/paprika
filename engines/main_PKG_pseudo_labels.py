@@ -15,6 +15,7 @@ from utils.common_utils import set_seed, getLogger
 if __name__ == '__main__':
     
     args = get_args_parser()
+
     set_seed(args.seed)
     logfile_path = os.path.abspath(
         os.path.join(args.log_dir, 'PKG_pseudo_labeling.log'))

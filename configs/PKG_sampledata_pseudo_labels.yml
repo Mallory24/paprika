@@ -25,8 +25,10 @@ sub_dir: pkg_data/howto100m/subtitles
 frame_dir: pkg_data/howto100m/videos
 
 # -- wikiHow settings:
-wikihow_dir: pkg_data/wikiHow
+wikihow_dir: pkg_data/wikiHow/partial
 wikihow_num_tasks: 1053
+#wikihow_dir: pkg_data/wikiHow/full
+#wikihow_num_tasks: 215365
 
 # -- HowTo100M settings:
 howto100m_dir: pkg_data/howto100m
