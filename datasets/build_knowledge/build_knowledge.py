@@ -12,6 +12,12 @@ def obtain_external_knowledge(args, logger):
         from datasets.build_knowledge.get_sim_scores import get_sim_scores
         get_sim_scores(args, logger)
 
+    if hasattr(args, 'topics_formed') and not args.topics_formed:
+        # TODO:
+        from datasets.build_knowledge.get_topics import get_topics
+        topic2task, task2topic = get_topics(args, logger)
+    
+    exit()
     if hasattr(args, 'nodes_formed') and not args.nodes_formed:
         
         from datasets.build_knowledge.get_nodes import get_nodes
@@ -19,9 +25,12 @@ def obtain_external_knowledge(args, logger):
         
     if hasattr(args, 'edges_formed') and not args.edges_formed:
         
-        from datasets.build_knowledge.get_edges import get_edges
-        pkg, G_wikihow, G_howto100m = get_edges(args, logger)
-
+        if args.graph_structure == 'global':
+            from datasets.build_knowledge.get_edges import get_edges
+            pkg, G_wikihow, G_howto100m = get_edges(args, logger)
+        elif args.graph_structure == 'local':
+            from datasets.build_knowledge.get_edges_local_graph import get_edges
+            pkg, G_wikihow, G_howto100m = get_edges(args, logger)
     exit()
 
     if hasattr(args, 'pseudo_label_DS_ready') and not args.pseudo_label_DS_ready:

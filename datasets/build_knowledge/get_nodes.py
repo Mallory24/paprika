@@ -16,7 +16,7 @@ def get_nodes_by_removing_step_duplicates(args, logger, step_des_feats=None):
             os.path.join(args.wikihow_dir, 'step2node.pickle')
         ):
             with open(os.path.join(args.wikihow_dir, 'node2step.pickle'), 'rb') as f:
-                node2step= pickle.load(f)
+                node2step = pickle.load(f)
             with open(os.path.join(args.wikihow_dir, 'step2node.pickle'), 'rb') as f:
                 step2node = pickle.load(f)  
         else:

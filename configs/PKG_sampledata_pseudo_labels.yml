@@ -11,18 +11,12 @@ external_knowledge_ready: False
 segment_wikistep_sim_scores_ready: True
 nodes_formed: False
 edges_formed: False
+topics_formed: False
 #pseudo_label_VNM_ready: False
-pseudo_label_VTM_ready: False
+#pseudo_label_VTM_ready: False
 #pseudo_label_TCL_ready: False
 #pseudo_label_NRL_ready: False
 
-# Added
-# -- Similarity settings:
-use_captions: True
-#sub_dir: pkg_data/cae/subtitles
-sub_dir: pkg_data/howto100m/subtitles
-#frame_dir: pkg_data/cae/videos
-frame_dir: pkg_data/howto100m/videos
 
 # -- wikiHow settings:
 wikihow_dir: pkg_data/wikiHow/partial
@@ -30,11 +24,35 @@ wikihow_num_tasks: 1053
 #wikihow_dir: pkg_data/wikiHow/full
 #wikihow_num_tasks: 215365
 
-# -- HowTo100M settings:
+
+# -- HowTo100M settings: # TODO: adapt it to also CAE
 howto100m_dir: pkg_data/howto100m
 howto100m_num_tasks: 1059 # TO CHECK
+#howto100m_num_tasks: 123520 # FULL
 video_meta_csv_path: pkg_data/howto100m/HowTo100M_v1.csv
 task_id_to_task_name_csv_path: pkg_data/howto100m/task_ids.csv
+
+
+# -- Alignment settings:
+use_captions: True
+#sub_dir: pkg_data/cae/subtitles
+sub_dir: pkg_data/howto100m/subtitles
+#frame_dir: pkg_data/cae/videos
+frame_dir: pkg_data/howto100m/videos
+
+
+# -- Graph structure settings:
+graph_structure: local
+# graph_structure: global (paprika's original structure)
+
+# -- For Local graph (based on task similarity) settings:
+task_dir: pkg_data/cae/task_titles
+#task_dir: pkg_data/howto100m/task_titles
+task_clustering_linkage: average
+task_clustering_distance_thresh: 0.5
+task_clustering_affinity: cosine
+#num_tasks: (depends on the video resources used)
+
 
 # -- Graph node settings:
 remove_step_duplicates: True
@@ -43,6 +61,7 @@ step_clustering_distance_thresh: 0.09
 step_clustering_affinity: cosine
 num_nodes: 10038
 # 10038 if remove_step_duplicates or 10588 if not
+# nodes is number of wikihow step_headlines
 
 
 # -- Graph edge settings:

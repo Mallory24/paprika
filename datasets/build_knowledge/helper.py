@@ -20,12 +20,20 @@ def get_step_des_feats(args, logger, language_model='MPNet'):
         with open(
             os.path.join(
                 args.wikihow_dir, 
-                's3d_text_feat/step_embeddings.pickle'
+                'step_headlines/s3d_text_feat/step_embeddings.pickle'
             ), 'rb') as f:
             
             step_des_feats = pickle.load(f)
         
     return step_des_feats
+
+
+def get_task_titles_feats(input_dir):
+    with open(os.path.join(input_dir,
+                           'task_titles/s3d_text_feat/task_title_embeddings.pickle'), 'rb') as f:
+            task_title_feats = pickle.load(f)
+    
+    return task_title_feats
 
 
 def get_all_video_ids(args, logger, format=None):
