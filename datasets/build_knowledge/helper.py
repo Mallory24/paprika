@@ -4,6 +4,8 @@ import numpy as np
 import json
 from tqdm import tqdm
 import pickle
+import pandas as pd
+from collections import defaultdict
 
 
 def get_step_des_feats(args, logger, language_model='MPNet'):
@@ -30,21 +32,40 @@ def get_step_des_feats(args, logger, language_model='MPNet'):
 
 def get_task_titles_feats(input_dir):
     with open(os.path.join(input_dir,
-                           'task_titles/s3d_text_feat/task_title_embeddings.pickle'), 'rb') as f:
-            task_title_feats = pickle.load(f)
-    
+                           'task_titles/s3d_text_feats/task_title_embeddings.pickle'), 'rb') as f:
+        task_title_feats = pickle.load(f)
+
     return task_title_feats
+
+
+def merge_task_title_feats(wikihow_tasktitle_feat_dict, howto100m_tasktitle_feat_dict):
+    merged_task_id_2_original_task_id = defaultdict()
+    merged_feats = []
+    
+    for idx, (article_id, tasktitle_feat) in enumerate(wikihow_tasktitle_feat_dict.items()):
+        merged_task_id_2_original_task_id[idx] = ('wikihow', article_id)
+        merged_feats.append(tasktitle_feat)
+        
+    for idx, (article_id, tasktitle_feat) in enumerate(howto100m_tasktitle_feat_dict.items()):
+        idx += len(wikihow_tasktitle_feat_dict)
+        merged_task_id_2_original_task_id[idx] = ('howto100m', article_id)
+        merged_feats.append(tasktitle_feat)
+        
+    merged_tasktitle_feats = np.concatenate(merged_feats, axis=0)
+
+    return merged_task_id_2_original_task_id, merged_tasktitle_feats
 
 
 def get_all_video_ids(args, logger, format=None):
     start_time = time.time()
     if format == 'txt':
-        # TODO: args.sub_dir to a general dir
-        video_path = os.path.join(args.sub_dir, 'sampled_vids.txt')
+        video_path = os.path.join(args.video_resource_dir, 'vids.txt')
         with open(video_path, 'r') as f:
-            videos = [vid.rstrip() for vid in f.readlines()]
+            videos = [vid.replace('\n', '') for vid in f.readlines()]
+    
+    # TODO: put used videos ids in a *.txt, and delete the following code block
     else:
-        # args.howto100m_dir to args.frame_dir
+        # Changed: args.howto100m_dir to args.frame_dir
         if os.path.exists(os.path.join(args.frame_dir, 'video_IDs.npy')):
             videos = np.load(os.path.join(args.frame_dir, 'video_IDs.npy'))
         else:
@@ -61,6 +82,26 @@ def get_all_video_ids(args, logger, format=None):
     return videos
 
 
+def get_task_ids_to_video_ids(args):
+    task_id_to_video_ids = {}
+    video_id_to_task_id = {}
+
+    video_meta_df = pd.read_csv(args.video_meta_csv_path)
+  
+    for index, row in video_meta_df.iterrows():
+        video_id = row['video_id']
+        task_id = row['task_id']
+        if task_id not in task_id_to_video_ids:
+            task_id_to_video_ids[task_id] = []
+        task_id_to_video_ids[task_id].append(video_id)
+    
+    for task_id, video_ids in task_id_to_video_ids.items():
+        for video_id in video_ids:
+            video_id_to_task_id[video_id] = task_id
+    
+    return task_id_to_video_ids, video_id_to_task_id
+
+
 def find_matching_of_a_segment(
     sim_scores, criteria="threshold", threshold=0.7, topK=3):
     
@@ -68,8 +109,7 @@ def find_matching_of_a_segment(
     sorted_indices = np.argsort(-sim_scores)  # indices of sorting in descending order
 
     matched_steps, matched_steps_score = find_matching_of_a_segment_given_sorted_val_corres_idx(
-        sorted_values, sorted_indices, criteria=criteria, threshold=threshold, topK=topK
-    )
+        sorted_values, sorted_indices, criteria=criteria, threshold=threshold, topK=topK)
     
     return matched_steps, matched_steps_score
 
@@ -79,6 +119,7 @@ def find_matching_of_a_segment_given_sorted_val_corres_idx(
     
     matched_steps = list()
     matched_steps_score = list()
+
     if criteria == "threshold":
         # Pick all steps with sim-score > threshold.
         for i in range(len(sorted_values)):

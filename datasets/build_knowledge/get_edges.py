@@ -13,6 +13,7 @@ from datasets.build_knowledge.helper import *
 
 import sys
 
+
 def get_num_neighbors_of_nodes(G):
     """
     - G: an nxn array to represent adj matrx
@@ -106,10 +107,11 @@ def get_edges_between_wikihow_steps_of_one_howto100m_video(args, video, sim_scor
 
 def get_edges_between_wikihow_steps_in_howto100m(args, logger, total_num_steps):
     if args.use_captions:
-        sim_score_path = os.path.join(args.sub_dir, 'sim_scores')
+        sim_score_path = os.path.join(args.video_resource_dir, 'sim_scores/global')
     else:
-        sim_score_path = os.path.join(args.frame_dir, 'sim_scores')
+        sim_score_path = os.path.join(args.video_resource_dir, 'sim_scores/global')
 
+    # TODO: Local graph: on a selective set of videos
     videos = get_all_video_ids(args, logger, format='txt')
     
     chunksize = math.ceil(len(videos)/args.num_workers)
@@ -210,9 +212,9 @@ def get_edges(args, logger):
 
     # save the output
     if args.use_captions:
-        graph_savedir = os.path.join(args.sub_dir, 'graph_output')
+        graph_savedir = os.path.join(args.video_resource_dir, 'subtitles/graph_output/global')
     else:
-        graph_savedir = os.path.join(args.frame_dir, 'graph_output')
+        graph_savedir = os.path.join(args.video_resource_dir, 'videos/graph_output/global')
     os.makedirs(graph_savedir, exist_ok=True)
     
     pkg_savepath = os.path.join(

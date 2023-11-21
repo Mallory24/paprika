@@ -9,9 +9,9 @@ entity:
 need_external_knowledge: True
 external_knowledge_ready: False
 segment_wikistep_sim_scores_ready: True
-nodes_formed: False
+nodes_formed: True
 edges_formed: False
-topics_formed: False
+topics_formed: True
 #pseudo_label_VNM_ready: False
 #pseudo_label_VTM_ready: False
 #pseudo_label_TCL_ready: False
@@ -25,29 +25,34 @@ wikihow_num_tasks: 1053
 #wikihow_num_tasks: 215365
 
 
-# -- HowTo100M settings: # TODO: adapt it to also CAE
-howto100m_dir: pkg_data/howto100m
+# -- HowTo100M/CAE settings:
+#howto100m_dir: pkg_data/howto100m (Used in DS, NRL, TCL, VNM, VTM)
 howto100m_num_tasks: 1059 # TO CHECK
 #howto100m_num_tasks: 123520 # FULL
-video_meta_csv_path: pkg_data/howto100m/HowTo100M_v1.csv
-task_id_to_task_name_csv_path: pkg_data/howto100m/task_ids.csv
+
+# --To use HowTo100M:
+video_resource: howto100m
+video_resource_dir: pkg_data/howto100m
+video_meta_csv_path: pkg_data/howto100m/HowTo100M_video_meta.csv
+task_id_to_task_name_csv_path: pkg_data/howto100m/selected_task_ids.csv
+
+# --To use CAE:
+#video_resource: cae
+#video_resource_dir: pkg_data/cae
+#video_meta_csv_path: pkg_data/cae/cae_video_meta.csv
+#task_id_to_task_name_csv_path: pkg_data/cae/selected_task_ids.csv
 
 
-# -- Alignment settings:
+# -- Alignment settings (get_sim_scores.py):
 use_captions: True
-#sub_dir: pkg_data/cae/subtitles
-sub_dir: pkg_data/howto100m/subtitles
-#frame_dir: pkg_data/cae/videos
-frame_dir: pkg_data/howto100m/videos
 
 
 # -- Graph structure settings:
 graph_structure: local
 # graph_structure: global (paprika's original structure)
 
+
 # -- For Local graph (based on task similarity) settings:
-task_dir: pkg_data/cae/task_titles
-#task_dir: pkg_data/howto100m/task_titles
 task_clustering_linkage: average
 task_clustering_distance_thresh: 0.5
 task_clustering_affinity: cosine
@@ -65,10 +70,11 @@ num_nodes: 10038
 
 
 # -- Graph edge settings:
+graph_use_wikihow: False
 graph_find_matched_steps_criteria: topK
 # {threshold | threshold+topK | topK}
 graph_find_matched_steps_for_segments_thresh: 10
-graph_find_matched_steps_for_segments_topK: 3
+graph_find_matched_steps_for_segments_topK: 1
 edge_min_aggconf: 1000
 
 

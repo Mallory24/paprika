@@ -11,13 +11,13 @@ def get_nodes_by_removing_step_duplicates(args, logger, step_des_feats=None):
     if args.remove_step_duplicates:
         start_time = time.time()
         if os.path.exists(
-            os.path.join(args.wikihow_dir, 'node2step.pickle')
+            os.path.join(args.wikihow_dir, 'step_headlines/node2step.pickle')
         ) and os.path.exists(
-            os.path.join(args.wikihow_dir, 'step2node.pickle')
+            os.path.join(args.wikihow_dir, 'step_headlines/step2node.pickle')
         ):
-            with open(os.path.join(args.wikihow_dir, 'node2step.pickle'), 'rb') as f:
+            with open(os.path.join(args.wikihow_dir, 'step_headlines/node2step.pickle'), 'rb') as f:
                 node2step = pickle.load(f)
-            with open(os.path.join(args.wikihow_dir, 'step2node.pickle'), 'rb') as f:
+            with open(os.path.join(args.wikihow_dir, 'step_headlines/step2node.pickle'), 'rb') as f:
                 step2node = pickle.load(f)  
         else:
             assert step_des_feats is not None
@@ -37,9 +37,9 @@ def get_nodes_by_removing_step_duplicates(args, logger, step_des_feats=None):
                 node2step[cluster_id] = cluster_members
                 for step_id in cluster_members:
                     step2node[step_id] = cluster_id
-            with open(os.path.join(args.wikihow_dir, 'node2step.pickle'), 'wb') as f:
+            with open(os.path.join(args.wikihow_dir, 'step_headlines/node2step.pickle'), 'wb') as f:
                 pickle.dump(node2step, f)
-            with open(os.path.join(args.wikihow_dir, 'step2node.pickle'), 'wb') as f:
+            with open(os.path.join(args.wikihow_dir, 'step_headlines/step2node.pickle'), 'wb') as f:
                 pickle.dump(step2node, f)  
 
             logger.info("from steps to nodes took {} s".format(round(time.time()-start_time, 2)))

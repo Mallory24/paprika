@@ -7,19 +7,18 @@ def obtain_external_knowledge(args, logger):
         from datasets.build_knowledge.DS_get_sim_scores import DS_get_sim_scores
         DS_get_sim_scores(args, logger)
 
+    if hasattr(args, 'topics_formed') and not args.topics_formed:
+    # this is for constructing local graph based on task similarity
+        from datasets.build_knowledge.get_topics import get_topics
+        topic2task, wikihow_task2topic, howto100m_task2topic = get_topics(args, logger)
+
     if hasattr(args, 'segment_wikistep_sim_scores_ready') and (
         not args.segment_wikistep_sim_scores_ready):
         from datasets.build_knowledge.get_sim_scores import get_sim_scores
         get_sim_scores(args, logger)
 
-    if hasattr(args, 'topics_formed') and not args.topics_formed:
-        # TODO:
-        from datasets.build_knowledge.get_topics import get_topics
-        topic2task, task2topic = get_topics(args, logger)
-    
-    exit()
     if hasattr(args, 'nodes_formed') and not args.nodes_formed:
-        
+        # TODO: adapt to local graph
         from datasets.build_knowledge.get_nodes import get_nodes
         node2step, step2node = get_nodes(args, logger)
         
@@ -28,9 +27,10 @@ def obtain_external_knowledge(args, logger):
         if args.graph_structure == 'global':
             from datasets.build_knowledge.get_edges import get_edges
             pkg, G_wikihow, G_howto100m = get_edges(args, logger)
+            
         elif args.graph_structure == 'local':
-            from datasets.build_knowledge.get_edges_local_graph import get_edges
-            pkg, G_wikihow, G_howto100m = get_edges(args, logger)
+            from datasets.build_knowledge.get_edges_local_graph import get_local_graph_based_on_topic_similarity
+            get_local_graph_based_on_topic_similarity(args, logger)
     exit()
 
     if hasattr(args, 'pseudo_label_DS_ready') and not args.pseudo_label_DS_ready:
